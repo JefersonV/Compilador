@@ -1,1 +1,1 @@
-Basic structure of a compiler with the JFlex, CompilerTools and FlatLaf libraries
+Estructura básica, por ahora solo la gestión de archivos y diseño inicial
