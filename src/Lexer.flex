@@ -34,4 +34,7 @@ Numero = 0 | [1-9][0-9]*
 /* Comentarios o espacios en blanco */
 {Comentario}|{EspacioEnBlanco} { /*Ignorar*/ }
 
+/*Identificador*/
+\${Identificador} { return token(yytext(), "IDENTIFICADOR", yyline, yycolumn); }
+
 . { return token(yytext(), "ERROR", yyline, yycolumn); }

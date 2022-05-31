@@ -344,20 +344,22 @@ public class Compilador extends javax.swing.JFrame {
             FileOutputStream output = new FileOutputStream(codigo);
             byte[] bytesText = jtpCode.getText().getBytes();
             output.write(bytesText);
-            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF8"));
+            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF-8"));
             lexer = new Lexer(entrada);
-            while (true) {
+            while(true) {
                 Token token = lexer.yylex();
-                if (token == null) {
+                if(token == null) {
                     break;
                 }
                 tokens.add(token);
             }
         } catch (FileNotFoundException ex) {
-            System.out.println("El archivo no pudo ser encontrado... " + ex.getMessage());
+            Logger.getLogger(Compilador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            System.out.println("Error al escribir en el archivo... " + ex.getMessage());
+            Logger.getLogger(Compilador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+            
+       
     }
 
     private void syntacticAnalysis() {
@@ -371,28 +373,26 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     private void colorAnalysis() {
-        /* Limpiar el arreglo de colores */
-        textsColor.clear();
-        /* Extraer rangos de colores */
-        LexerColor lexerColor;
+        textsColor.clear  ();
+        LexerColor lexer;
         try {
             File codigo = new File("color.encrypter");
             FileOutputStream output = new FileOutputStream(codigo);
             byte[] bytesText = jtpCode.getText().getBytes();
             output.write(bytesText);
-            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF8"));
-            lexerColor = new LexerColor(entrada);
-            while (true) {
-                TextColor textColor = lexerColor.yylex();
-                if (textColor == null) {
+            BufferedReader entrada = new BufferedReader(new InputStreamReader(new FileInputStream(codigo), "UTF-8"));
+            lexer = new LexerColor(entrada);
+            while(true) {
+                TextColor textColor = lexer.yylex();
+                if(textColor == null) {
                     break;
                 }
                 textsColor.add(textColor);
             }
         } catch (FileNotFoundException ex) {
-            System.out.println("El archivo no pudo ser encontrado... " + ex.getMessage());
+            Logger.getLogger(Compilador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            System.out.println("Error al escribir en el archivo... " + ex.getMessage());
+            Logger.getLogger(Compilador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         Functions.colorTextPane(textsColor, jtpCode, new Color(40, 40, 40));
     }
