@@ -21,8 +21,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -57,9 +59,11 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     private void init() {
-        title = "Compiler";
+        title = "Compilador";
         setLocationRelativeTo(null);
         setTitle(title);
+        //Extensión que tendrá nuestro compilador .comp
+        //jpt -> jtextComponent
         directorio = new Directory(this, jtpCode, title, ".comp");
         addWindowListener(new WindowAdapter() {// Cuando presiona la "X" de la esquina superior derecha
             @Override
@@ -68,20 +72,26 @@ public class Compilador extends javax.swing.JFrame {
                 System.exit(0);
             }
         });
-        //Functions.setLineNumberOnJTextComponent(jtpCode);
+        Functions.setLineNumberOnJTextComponent(jtpCode);
+        //timer para colorear el código
         timerKeyReleased = new Timer((int) (1000 * 0.3), (ActionEvent e) -> {
             timerKeyReleased.stop();
             colorAnalysis();
         });
+        //Detectar si hay cambios (indicarlo en la ventana)
         Functions.insertAsteriskInName(this, jtpCode, () -> {
             timerKeyReleased.restart();
         });
+        
+        //inicialización de tokens
         tokens = new ArrayList<>();
         errors = new ArrayList<>();
         textsColor = new ArrayList<>();
         identProd = new ArrayList<>();
         identificadores = new HashMap<>();
-        Functions.setAutocompleterJTextComponent(new String[]{}, jtpCode, () -> {
+        //Function -> autocompletar parecida a la del propio netbeans
+        //Se activa con ctrl + space
+        Functions.setAutocompleterJTextComponent(new String[]{"color","int","var", "function"}, jtpCode, () -> {
             timerKeyReleased.restart();
         });
     }
@@ -266,7 +276,7 @@ public class Compilador extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         directorio.New();
-        clearFields();
+        clearFields(); 
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
@@ -298,6 +308,7 @@ public class Compilador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCompilarActionPerformed
 
+    //
     private void btnEjecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEjecutarActionPerformed
         btnCompilar.doClick();
         if (codeHasBeenCompiled) {
@@ -310,13 +321,14 @@ public class Compilador extends javax.swing.JFrame {
                 ArrayList<String> blocksOfCode = codeBlock.getBlocksOfCodeInOrderOfExec();
                 System.out.println(blocksOfCode);
 
-            }
+            } 
         }
     }//GEN-LAST:event_btnEjecutarActionPerformed
 
     private void compile() {
         clearFields();
         lexicalAnalysis();
+        //llenar tabla de tokens
         fillTableTokens();
         syntacticAnalysis();
         semanticAnalysis();
@@ -387,6 +399,7 @@ public class Compilador extends javax.swing.JFrame {
 
     private void fillTableTokens() {
         tokens.forEach(token -> {
+            //Arreglo de objetos
             Object[] data = new Object[]{token.getLexicalComp(), token.getLexeme(), "[" + token.getLine() + ", " + token.getColumn() + "]"};
             Functions.addRowDataInTable(tblTokens, data);
         });
@@ -395,6 +408,7 @@ public class Compilador extends javax.swing.JFrame {
     private void printConsole() {
         int sizeErrors = errors.size();
         if (sizeErrors > 0) {
+            //Ordenamos los errores por línea y columna
             Functions.sortErrorsByLineAndColumn(errors);
             String strErrors = "\n";
             for (ErrorLSSL error : errors) {
@@ -410,6 +424,7 @@ public class Compilador extends javax.swing.JFrame {
 
     private void clearFields() {
         Functions.clearDataInTable(tblTokens);
+        //Limpiar datos de tabla de tokens
         jtaOutputConsole.setText("");
         tokens.clear();
         errors.clear();
@@ -448,12 +463,15 @@ public class Compilador extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
+
             try {
                 UIManager.setLookAndFeel(new FlatIntelliJLaf());
             } catch (UnsupportedLookAndFeelException ex) {
-                System.out.println("LookAndFeel no soportado: " + ex);
+                Logger.getLogger(Compilador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
             new Compilador().setVisible(true);
+
+  
         });
     }
 
