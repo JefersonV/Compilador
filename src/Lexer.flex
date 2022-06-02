@@ -37,6 +37,13 @@ Numero = 0 | [1-9][0-9]*
 /*Identificador*/
 \${Identificador} { return token(yytext(), "IDENTIFICADOR", yyline, yycolumn); }
 
+/*Tipos de dato*/
+número |
+color { return token(yytext(), "TIPO_DATO", yyline, yycolumn); }
+
+/*Número*/
+{Numero} { return token(yytext(), "NUMERO", yyline, yycolumn); }
+
 /*Colores*/
 #[{Letra}|{Digito}]{6} { return token(yytext(), "COLOR", yyline, yycolumn); }
 
