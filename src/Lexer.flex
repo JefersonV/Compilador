@@ -101,7 +101,7 @@ derechaEsBlanco |
 derechaEsNegro { return token(yytext(), "VER", yyline, yycolumn); }
 
 /*Estructuras de control*/
-mientras |
+repetir |
 repetirMientras { return token(yytext(), "CICLO_M", yyline, yycolumn); }
 
 /*Detener mientras*/

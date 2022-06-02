@@ -102,7 +102,7 @@ derechaEsBlanco |
 derechaEsNegro { return textColor(yychar, yylength(), new Color(150,0,80));}
 
 /*Estructuras de control*/
-mientras |
+repetir |
 repetirMientras { return textColor(yychar, yylength(), new Color(121,107,255)); }
 
 /*Detener mientras*/
