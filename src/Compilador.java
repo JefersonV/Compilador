@@ -364,14 +364,61 @@ public class Compilador extends javax.swing.JFrame {
 
     private void syntacticAnalysis() {
         Grammar gramatica = new Grammar(tokens, errors);
-
+        /*Eliminación gramática*/
+        gramatica.delete(new String[] {"ERROR", "ERROR_1", "ERROR_2"}, 1);
+        /*Agrupación de valores*/
+        gramatica.group("VALOR", "(NUMERO | COLOR)", true);
+        /*Agrupación de Variables*/
+        gramatica.group("VARIABLE", "TIPO_DATO IDENTIFICADOR OP_ASIG VALOR", true);
+        // Error
+        gramatica.group("VARIABLE", "TIPO_DATO OP_ASIG VALOR", true,
+        2, "error sintáctico {}: falta el identificador en la variable [#, %]");
+        //Para que el error sea más exacto en cuánto a la ubicación
+        gramatica.finalLineColumn();
+        gramatica.group("VARIABLE", "TIPO_DATO IDENTIFICADOR OP_ASIG", 3,
+                "error sintáctico {}: falta el valor en la declaración [#, %]");
+        gramatica.initialLineColumn();
+        /*Eliminación de tipos de dato y operadores de asignación*/
+        //cada vez que encuentre un tipo de dato solo, que no esté agrupado en una var lo va a eliminar
+        gramatica.delete("TIPO_DATO", 4,
+                "Error sintáctico {}: el tipo de dato no está en una declaración [#, %]");
+        gramatica.delete("OP_ASIG", 5,
+                "Error sintáctico {}: el Operador de asignación no está en una declaración [#,%");
+        
+        /*Agrupar identificadores y definición de parámetros*/
+        gramatica.group("VALOR", "IDENTIFICADOR", true);
+        gramatica.group("PARAMETROS", "VALOR (COMA VALOR)+");
+        
+        /*Agrupación de funciones*/
+        gramatica.group("FUNCION","(MOVIMIENTO | PINTAR | DETENER_PINTAR | TOMAR |" + 
+                "LANZAR_MONEDA | VER | DETENER_REPETIR)", true);
+        
+        gramatica.group("FUNCION_COMP", "FUNCION PARENTESIS_A (VALOR | PARAMETROS)? PARENTENSIS_C", true);
+        
+        gramatica.group("FUNCION_COMP", "FUNCION (VALOR | PARAMETROS)? PARENTENSIS_C", true,6,
+                "Error sintáctico{}: Falta el paréntesis que abre en la función [#, %]");
+        
+        gramatica.group("FUNCION_COMP", "FUNCION PARENTESIS_A (VALOR | PARAMETROS)", true, 7,
+                "Error Sintáctico {}: Falta el paréntesis que cierra en la función [#, %]");
+        
+        gramatica.initialLineColumn();
+        
+        /*Eliminación de funciones incompletas*/
+        gramatica.delete("FUNCION",8,"Error Sintáctico {}: La función no está declarada correctamente");
+        
+        /*Recursividad*/
+        gramatica.loopForFunExecUntilChangeNotDetected(() -> {
+            gramatica.group("EXP_LOGICA", "(FUNCION_COMP | EXP_LOGICA) (OP_LOGICO (FUNCION_COMP | EXP_LOGICA))+");
+            gramatica.group("EXP_LOGICA", "PARENTESIS_A (EXP_LOGICA | FUNCION_COMP) PARENTESIS_C");    
+        });
+        
         /* Mostrar gramáticas */
         gramatica.show();
     }
 
     private void semanticAnalysis() {
     }
-
+ 
     private void colorAnalysis() {
         textsColor.clear  ();
         LexerColor lexer;

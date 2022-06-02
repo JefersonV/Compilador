@@ -95,7 +95,7 @@ frenteEsClaro |
 frenteEsBaliza |
 frenteEsBlanco |
 frenteEsNegro |
-derechoEsObstáculo |
+derechaEsObstáculo |
 derechaEsClaro |
 derechaEsBaliza |
 derechaEsBlanco |

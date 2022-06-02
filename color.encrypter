@@ -1,9 +1,1 @@
-/*Comentario*/
-#A72S465
-$identificador
-(as)
-{
-detenerPintar 
-}
-&& ||
-final
+(lanzarMoneda() & izquierdaEsClaro()) | derechaEsObstáculo())
