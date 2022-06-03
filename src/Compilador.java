@@ -375,7 +375,9 @@ public class Compilador extends javax.swing.JFrame {
         /*Agrupación de valores*/
         gramatica.group("VALOR", "(NUMERO | COLOR)");
         /*Agrupación de Variables*/
-        gramatica.group("VARIABLE", "TIPO_DATO IDENTIFICADOR OP_ASIG VALOR", true);
+        //Semántico: tCada vez que hace el análisis sintáctico de forma automática 
+        //la clase grammar guarda la producción en el arrayList declarado como "identProd"
+        gramatica.group("VARIABLE", "TIPO_DATO IDENTIFICADOR OP_ASIG VALOR", true, identProd);
         // Error
         gramatica.group("VARIABLE", "TIPO_DATO OP_ASIG VALOR",
         2, "Error sintáctico {}: Falta el identificador en la variable [#, %]");
@@ -495,6 +497,26 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     private void semanticAnalysis() {
+        HashMap<String, String> identDataType = new HashMap<>();
+        identDataType.put("color", "COLOR");
+        identDataType.put("número", "NUMERO");
+        
+        for(Production id: identProd) {
+            /*
+            System.out.println(id.lexemeRank(0, -1));
+            System.out.println(id.lexicalCompRank(0, -1));
+        */
+            
+            if(!identDataType.get(id.lexemeRank(0)).equals(id.lexicalCompRank(-1))) {
+                errors.add(new ErrorLSSL(1, "Error Semántico {}: valor no compatible con el tipo de dato [#,%]",id,true));
+            } else if(id.lexicalCompRank(-1).equals("COLOR") && !id.lexemeRank(-1).matches("#[0-9a-fA-F]+")) {
+                //false indica que es la linea final
+                errors.add(new ErrorLSSL(2, "Error Semántico {}: el color no es un hexadecimal [#,%]", id, false));
+            }
+            else {
+                identificadores.put(id.lexemeRank(1), id.lexemeRank(-1));
+            }
+        }
     }
  
     private void colorAnalysis() {

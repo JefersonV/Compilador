@@ -1,7 +1,8 @@
-color $rojo --> #FF00F0;
+color $rojo --> #A4568F ;
 número $random --> 400;
 repetir(4) {
 	repetirMientras(lanzarMoneda()) {
 		pintar();
 	}
 }
+número $valor --> 4500;
