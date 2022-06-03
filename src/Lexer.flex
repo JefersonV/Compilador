@@ -81,7 +81,7 @@ tomar |
 poner { return token(yytext(), "TOMAR", yyline, yycolumn); }
 
 /*Lanzar moneda*/
-lanzarMoneda { return token(yytext(), "LANZAR", yyline, yycolumn); }
+lanzarMoneda { return token(yytext(), "LANZAR_MONEDA", yyline, yycolumn); }
 
 /*Ver*/
 izquierdaEsObstáculo |
@@ -102,10 +102,10 @@ derechaEsNegro { return token(yytext(), "VER", yyline, yycolumn); }
 
 /*Estructuras de control*/
 repetir |
-repetirMientras { return token(yytext(), "CICLO_M", yyline, yycolumn); }
+repetirMientras { return token(yytext(), "REPETIR", yyline, yycolumn); }
 
 /*Detener mientras*/
-interrumpir { return token(yytext(), "ROMPE_CICLO", yyline, yycolumn); }
+interrumpir { return token(yytext(), "DETENER_REPETIR", yyline, yycolumn); }
 
 /*Condicional*/
 si |

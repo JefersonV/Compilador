@@ -1,12 +1,7 @@
 color $rojo --> #FF00F0;
-repetir(4){
-	atrás();
-	izquierda();
-	repetirMientras(lanzarMoneda()){
-		derecha();
+número $random --> 400;
+repetir(4) {
+	repetirMientras($random) {
+		adelante();
 	}
-	izquierda();
 }
-
-color $azul --> #FFA0A0;
-adelante();

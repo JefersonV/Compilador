@@ -981,17 +981,17 @@ class Lexer {
             // fall through
           case 47: break;
           case 22:
-            { return token(yytext(), "CICLO_M", yyline, yycolumn);
+            { return token(yytext(), "REPETIR", yyline, yycolumn);
             }
             // fall through
           case 48: break;
           case 23:
-            { return token(yytext(), "ROMPE_CICLO", yyline, yycolumn);
+            { return token(yytext(), "DETENER_REPETIR", yyline, yycolumn);
             }
             // fall through
           case 49: break;
           case 24:
-            { return token(yytext(), "LANZAR", yyline, yycolumn);
+            { return token(yytext(), "LANZAR_MONEDA", yyline, yycolumn);
             }
             // fall through
           case 50: break;
