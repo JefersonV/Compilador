@@ -375,14 +375,14 @@ public class Compilador extends javax.swing.JFrame {
         /*Agrupación de valores*/
         gramatica.group("VALOR", "(NUMERO | COLOR)");
         /*Agrupación de Variables*/
-        gramatica.group("VARIABLE", "TIPO_DATO IDENTIFICADOR OP_ASIG VALOR");
+        gramatica.group("VARIABLE", "TIPO_DATO IDENTIFICADOR OP_ASIG VALOR", true);
         // Error
         gramatica.group("VARIABLE", "TIPO_DATO OP_ASIG VALOR",
         2, "Error sintáctico {}: Falta el identificador en la variable [#, %]");
         //Para que el error sea más exacto en cuánto a la ubicación
         gramatica.finalLineColumn();
         gramatica.group("VARIABLE", "TIPO_DATO IDENTIFICADOR OP_ASIG", 
-                3,"error sintáctico {}: falta el valor en la declaración [#, %]");
+                3,"Error sintáctico {}: falta el valor en la declaración [#, %]");
         gramatica.initialLineColumn();
         
         /*Eliminación de tipos de dato y operadores de asignación*/
@@ -393,18 +393,19 @@ public class Compilador extends javax.swing.JFrame {
                 5,"Error sintáctico {}: el Operador de asignación no está en una declaración [#,%]");
         
         /*Agrupar identificadores y definición de parámetros*/
-        gramatica.group("VALOR", "IDENTIFICADOR");
-        gramatica.group("PARAMETROS", "VALOR (COMA VALOR)+");
+        gramatica.group("VALOR", "IDENTIFICADOR", true);
+        gramatica.group("PARAMETROS", "VALOR");
+        //gramatica.group("PARAMETROS", "VALOR (COMA VALOR)+");
         
         /*Agrupación de funciones*/
         gramatica.group("FUNCION","(MOVIMIENTO | PINTAR | DETENER_PINTAR | TOMAR |" + 
-                "LANZAR_MONEDA | VER | DETENER_REPETIR)");
-        gramatica.group("FUNCION_COMP", "FUNCION PARENTESIS_A (VALOR | PARAMETROS)? PARENTENSIS_C",true);
+                "LANZAR_MONEDA | VER | DETENER_REPETIR)", true);
+        gramatica.group("FUNCION_COMP", "FUNCION PARENTESIS_A (VALOR | PARAMETROS)? PARENTESIS_C",true);
         
-        gramatica.group("FUNCION_COMP", "FUNCION (VALOR | PARAMETROS)? PARENTENSIS_C", true,
+        gramatica.group("FUNCION_COMP", "FUNCION (VALOR | PARAMETROS)? PARENTESIS_C", true,
                 6,"Error sintáctico{}: Falta el paréntesis que abre en la función [#, %]");
         
-        gramatica.initialLineColumn();
+        gramatica.finalLineColumn();
         gramatica.group("FUNCION_COMP", "FUNCION PARENTESIS_A (VALOR | PARAMETROS)", true,
                 7,"Error Sintáctico {}: Falta el paréntesis que cierra en la función [#, %]");
          

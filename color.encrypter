@@ -1,7 +1,7 @@
 color $rojo --> #FF00F0;
 número $random --> 400;
 repetir(4) {
-	repetirMientras($random) {
-		adelante();
+	repetirMientras(lanzarMoneda()) {
+		pintar();
 	}
 }
