@@ -1,1 +1,4 @@
-Estructura básica, por ahora solo la gestión de archivos y diseño inicial
+#Compilador
+##Librerías utilizadas
+###JFlex --> Análisis léxico
+###CompilerTools --> Análisis sintáctico y semántico 
